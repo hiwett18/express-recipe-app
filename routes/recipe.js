@@ -4,10 +4,21 @@ import { prisma } from "../db/index.js";
 const router = express.Router();
 
 // /recipe
-router.get("/", async (_request, response)=>{
+router.get("/", async (request, response)=>{
     //send back all recipes
 
-    const allRecipes = await prisma.recipe.findMany();
+    const allRecipes = await prisma.recipe.findMany({
+        where: {
+            //request.user comes from passport and the data that was stored in the token's payload
+            userId: request.user.id,
+          },
+          //Only chooses the fields you wish to get back from a table
+          select: {
+            id: true,
+            name: true,
+            description: true,
+          },
+    });
 
     response.status(200).json({
         sucess: true,
