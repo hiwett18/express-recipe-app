@@ -16,11 +16,15 @@ export default function createServer(){
     
     app.use("/user", userRouter)
 
-    app.use("/recipe", passport.authenticate("jwt", {
+    app.use("/recipe", recipeRouter)
+
+    app.use("/auth", authRoutes)
+
+    app.get("/protected", passport.authenticate("jwt", {
         session: false 
     }), recipeRouter);
 
-    app.use("/auth", authRoutes)
+    
 
 
     return app;

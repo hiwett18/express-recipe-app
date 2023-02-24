@@ -1,5 +1,6 @@
-import express, { request } from 'express';
+import express from 'express';
 import { prisma } from '../db/index.js' 
+import jwt from "jsonwebtoken"
 import argon2 from "argon2"; 
 
 
@@ -25,7 +26,7 @@ router.post("/signup", async (req, res) => {
           const newUser = await prisma.user.create({
             data: {
               username: req.body.username,
-              password: hashPassword,
+              password: hashPassword
               
             },
           });
@@ -78,10 +79,10 @@ router.post("/login", async (req, res) => {
             const token = jwt.sign(
               {
                 id: foundUser.id,
-                username: foundUser.username,
-                email:foundUser.email,
+                username: foundUser.username
+                
               },
-              "thisisasecretekey"
+              "thisisasecretkey"
             );
   
             res.status(200).json({

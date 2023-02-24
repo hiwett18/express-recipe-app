@@ -31,13 +31,13 @@ router.post("/", async (request, response) => {
 
     const newRecipe = await prisma.recipe.create({
         data: {
-            name: request.body.recipe,
+            name: request.body.name,
             description: request.body.description,
             userId: 1
            
           },
           data: {
-            name: request.body.recipe,
+            name: request.body.name,
             description: request.body.description,
             userId: 2
            
@@ -75,6 +75,34 @@ router.get("/:userId/:recipeId", async function(request, response){
    
 })
 
+//updates recipes 
+router.put("/:recipeId", async (request, response) => {
+    const updateRecipe = await prisma.recipe.update({
+        where: {
+            id: parseInt(request.params.recipeId)
+        },
+        data: {
+            name: request.body.name,
+            description: request.body.description
+        }
+    });
+    //sends back response if it works 
+    response.status(200).json({
+        success: true, 
+        message: "recipe updated"
+    });
+})
 
+router.delete("/:recipeId", async (request, response) => {
+    const deleteRecipe = await prisma.recipe.delete({
+        where: {
+            id: parseInt(request.params.recipeId)
+        }
+    });
+    response.status(200).json({
+        success: true, 
+        message: "recipe deleted"
+    })
+})
 
 export default router; 

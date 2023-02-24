@@ -10,7 +10,7 @@ router.get("/", async (_request, response)=>{
     const allUsers = await prisma.user.findMany();
 
     response.status(200).json({
-        sucess: true,
+        success: true,
         users: allUsers
     })
 })
