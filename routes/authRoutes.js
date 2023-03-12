@@ -82,12 +82,12 @@ router.post("/login", async (req, res) => {
                 username: foundUser.username
                 
               },
-              "thisisasecretkey"
+              "thisIsASecretKey"
             );
   
             res.status(200).json({
               success: true,
-              token,
+              token
             });
           } else {
             res.status(401).json({

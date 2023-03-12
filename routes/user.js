@@ -28,6 +28,48 @@ router.post("/", async (request, response) => {
         sucess: true
     });
 }); 
+router.post("/login", async (req, res) => {
+    try {
+        const foundUser = await prisma.user.findFirstOrThrow({
+            where: {
+                username: req.body.username
+            }
+        });
+
+        try {
+            const verifiedPassword = await argon2.verify(foundUser.password, req.body.password);
+
+            if (verifiedPassword) {
+                const token = jwt.sign({
+                    user: {
+                        username: foundUser.username,
+                        id: foundUser.id
+                    }
+                }, "thisIsASecretKey");
+
+                res.status(200).json({
+                    success: true,
+                    token
+                });
+            } else {
+                res.status(401).json({
+                    success: false,
+                    message: "Incorrect username or password"
+                });
+            }
+        } catch (e) {
+            res.status(500).json({
+                success: false,
+                message: "Something went wrong"
+            });
+        };
+    } catch (err) {
+        res.status(401).json({
+            success: false,
+            message: "Incorrect username or password"
+        });
+    };
+});
 
 
 export default router; 
